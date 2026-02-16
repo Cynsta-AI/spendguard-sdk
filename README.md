@@ -21,7 +21,7 @@ uv tool install cynsta-spendguard
 
 ## Quickstart
 
-For fast local onboarding with `spendguard-sidecar`, follow `docs/quickstart.md`.
+For fast local onboarding with `spendguard-sidecar`, follow [`docs/quickstart.md`](docs/quickstart.md).
 
 ## Usage
 
