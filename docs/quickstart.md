@@ -71,6 +71,40 @@ spendguard budget get --agent <agent_id>
 
 If these commands work, local onboarding is complete.
 
+## 5) Wire It Into Your Agent Code
+
+After creating a budget, your app must send model calls through sidecar and include the SpendGuard agent id.
+
+Key requirement:
+- send requests to sidecar (`http://127.0.0.1:8787/v1/...`), not directly to provider APIs
+- include header `x-cynsta-agent-id: <agent_id>`
+
+Example with OpenAI Python SDK:
+
+```python
+import os
+from openai import OpenAI
+
+agent_id = os.environ["SPENDGUARD_AGENT_ID"]  # set this per running instance/job
+
+client = OpenAI(
+    base_url="http://127.0.0.1:8787/v1",
+    api_key="not-used-in-sidecar-mode",
+)
+
+resp = client.chat.completions.create(
+    model="gpt-4o-mini",
+    messages=[{"role": "user", "content": "Hello"}],
+    extra_headers={"x-cynsta-agent-id": agent_id},
+)
+
+print(resp.choices[0].message.content)
+```
+
+If you run many instances in parallel:
+- use one `SPENDGUARD_AGENT_ID` per instance if each should have separate budget
+- or reuse one id for shared budget (current sidecar lock model allows one in-flight run per agent id)
+
 ## Optional: Python Client Check
 
 ```python
