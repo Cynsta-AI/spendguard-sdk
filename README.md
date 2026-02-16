@@ -19,6 +19,10 @@ or with uv:
 uv tool install cynsta-spendguard
 ```
 
+## Quickstart
+
+For fast local onboarding with `spendguard-sidecar`, follow `docs/quickstart.md`.
+
 ## Usage
 
 Create an agent:
