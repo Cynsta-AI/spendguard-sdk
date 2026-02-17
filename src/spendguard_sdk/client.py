@@ -29,6 +29,37 @@ class SpendGuardClient:
     def get_budget(self, agent_id: str) -> dict[str, Any]:
         return self._request_json("GET", f"/v1/agents/{agent_id}/budget")
 
+    def create_run(self, agent_id: str) -> dict[str, Any]:
+        return self._request_json("POST", f"/v1/agents/{agent_id}/runs", {})
+
+    def openai_chat_completions(self, agent_id: str, run_id: str, payload: dict[str, Any]) -> dict[str, Any]:
+        return self._request_json(
+            "POST",
+            f"/v1/agents/{agent_id}/runs/{run_id}/openai/chat/completions",
+            payload,
+        )
+
+    def openai_responses(self, agent_id: str, run_id: str, payload: dict[str, Any]) -> dict[str, Any]:
+        return self._request_json(
+            "POST",
+            f"/v1/agents/{agent_id}/runs/{run_id}/openai/responses",
+            payload,
+        )
+
+    def grok_chat_completions(self, agent_id: str, run_id: str, payload: dict[str, Any]) -> dict[str, Any]:
+        return self._request_json(
+            "POST",
+            f"/v1/agents/{agent_id}/runs/{run_id}/grok/chat/completions",
+            payload,
+        )
+
+    def grok_responses(self, agent_id: str, run_id: str, payload: dict[str, Any]) -> dict[str, Any]:
+        return self._request_json(
+            "POST",
+            f"/v1/agents/{agent_id}/runs/{run_id}/grok/responses",
+            payload,
+        )
+
     def _request_json(self, method: str, path: str, payload: dict[str, Any] | None = None) -> dict[str, Any]:
         body = None
         headers = {"Accept": "application/json"}

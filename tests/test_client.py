@@ -54,6 +54,44 @@ class SpendGuardClientTests(unittest.TestCase):
         self.assertEqual(out["remaining_cents"], 123)
         self.assertEqual(seen_urls[0], "https://example.com/v1/agents/agent-abc/budget")
 
+    def test_create_run_uses_path(self) -> None:
+        seen: list[tuple[str, str, dict]] = []
+
+        def _fake_urlopen(req, timeout=30):  # type: ignore[no-untyped-def]
+            body = req.data.decode("utf-8") if req.data else "{}"
+            seen.append((req.method, req.full_url, json.loads(body)))
+            return _FakeResponse({"run_id": "run-1"})
+
+        client = SpendGuardClient("https://example.com")
+        with mock.patch("urllib.request.urlopen", side_effect=_fake_urlopen):
+            out = client.create_run("agent-abc")
+
+        self.assertEqual(out["run_id"], "run-1")
+        self.assertEqual(seen[0][0], "POST")
+        self.assertEqual(seen[0][1], "https://example.com/v1/agents/agent-abc/runs")
+        self.assertEqual(seen[0][2], {})
+
+    def test_grok_responses_uses_expected_path(self) -> None:
+        seen: list[tuple[str, str, dict]] = []
+
+        def _fake_urlopen(req, timeout=30):  # type: ignore[no-untyped-def]
+            body = req.data.decode("utf-8") if req.data else "{}"
+            seen.append((req.method, req.full_url, json.loads(body)))
+            return _FakeResponse({"id": "resp_1"})
+
+        payload = {"model": "grok-3", "input": "hello"}
+        client = SpendGuardClient("https://example.com")
+        with mock.patch("urllib.request.urlopen", side_effect=_fake_urlopen):
+            out = client.grok_responses("agent-abc", "run-xyz", payload)
+
+        self.assertEqual(out["id"], "resp_1")
+        self.assertEqual(seen[0][0], "POST")
+        self.assertEqual(
+            seen[0][1],
+            "https://example.com/v1/agents/agent-abc/runs/run-xyz/grok/responses",
+        )
+        self.assertEqual(seen[0][2], payload)
+
 
 if __name__ == "__main__":
     unittest.main()

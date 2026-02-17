@@ -7,6 +7,8 @@ Public SpendGuard repository for:
 - API contracts (`contracts/`)
 - Public examples and docs
 
+Supported provider endpoint families: `openai`, `grok` (xAI), `gemini`, `anthropic`.
+
 ## Install
 
 ```bash
@@ -80,4 +82,10 @@ from spendguard_sdk import SpendGuardClient
 client = SpendGuardClient("https://spendguard.example.com", api_key="sk_cynsta_live_...")
 agent = client.create_agent("agent-1")
 client.set_budget(agent["agent_id"], hard_limit_cents=5000, topup_cents=5000)
+run = client.create_run(agent["agent_id"])
+resp = client.grok_responses(
+    agent["agent_id"],
+    run["run_id"],
+    {"model": "grok-3", "input": "Give me a one-line summary of finite-state machines."},
+)
 ```

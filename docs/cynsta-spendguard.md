@@ -102,7 +102,7 @@ It supports:
 
 `CAP_STORE=supabase` (hosted default):
 
-- Supabase tables created by `infra/supabase/migrations/20260208180000_create_cap_tables.sql`
+- Supabase tables created by `cynsta-db/infra/supabase/migrations/20260208180000_create_cap_tables.sql`
 - API auth uses existing `api_keys` and requires `cap:use` scope
 
 ### 5.3 API Surface (MVP)
@@ -114,6 +114,8 @@ It supports:
 - `POST /v1/agents/{agent_id}/runs` -> `{ run_id }`
 - `POST /v1/agents/{agent_id}/runs/{run_id}/openai/chat/completions`
 - `POST /v1/agents/{agent_id}/runs/{run_id}/openai/responses`
+- `POST /v1/agents/{agent_id}/runs/{run_id}/grok/chat/completions`
+- `POST /v1/agents/{agent_id}/runs/{run_id}/grok/responses`
 - `POST /v1/responses` (OpenAI SDK compatibility; requires `x-cynsta-agent-id`)
 - `POST /v1/agents/{agent_id}/runs/{run_id}/gemini/generateContent`
 - `POST /v1/agents/{agent_id}/runs/{run_id}/anthropic/messages`
