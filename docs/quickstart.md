@@ -7,15 +7,30 @@ This guide gets you running with:
 
 ## Prerequisites
 
-- Python 3.10+
+- Docker Desktop (or Docker Engine + Compose v2)
+- Python 3.10+ (for CLI usage)
 - Internet access (to fetch pricing from cloud)
 
-## 1) Start Local Sidecar
+## 1) Start Local Sidecar (Docker, Recommended)
 
 Open a terminal in `spendguard-sidecar`:
 
 ```powershell
 cd spendguard-sidecar
+Copy-Item .env.example .env
+# Edit .env and set provider keys you plan to use.
+
+docker compose up -d --build
+docker compose logs -f sidecar
+```
+
+Expected: service starts successfully and does not fail pricing signature verification.
+
+## Optional: Start Sidecar From Source (No Docker)
+
+If you prefer a direct Python run:
+
+```powershell
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 pip install -r requirements.txt
@@ -30,8 +45,6 @@ $env:CAP_PRICING_SCHEMA_VERSION = "1"
 
 uvicorn app.main:app --reload --port 8787
 ```
-
-Expected: service starts successfully and does not fail pricing signature verification.
 
 ## 2) Verify Sidecar Health
 
@@ -50,12 +63,19 @@ Expected response body contains:
 ## 3) Install CLI and Point to Local Sidecar
 
 ```powershell
+python -m pip install --upgrade pip
+python -m pip install cynsta-spendguard
+
+$env:CAP_BASE_URL = "http://127.0.0.1:8787"
+```
+
+If you are developing the SDK locally, use editable install instead:
+
+```powershell
 cd ../spendguard-sdk
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 pip install -e .
-
-$env:CAP_BASE_URL = "http://127.0.0.1:8787"
 ```
 
 ## 4) Create Agent and Budget
@@ -130,3 +150,4 @@ print(agent["agent_id"])
 `CLI cannot connect to sidecar`
 - Ensure sidecar is running on `127.0.0.1:8787`.
 - Confirm `CAP_BASE_URL=http://127.0.0.1:8787`.
+- If running with Docker, inspect logs with `docker compose logs sidecar`.
