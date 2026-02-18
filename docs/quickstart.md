@@ -24,7 +24,7 @@ $env:CAP_MODE = "sidecar"
 $env:CAP_STORE = "sqlite"
 $env:CAP_SQLITE_PATH = ".\\cynsta-spendguard.db"
 $env:CAP_PRICING_SOURCE = "remote"
-$env:CAP_PRICING_URL = "https://cynsta-spendguard.onrender.com/v1/public/pricing"
+$env:CAP_PRICING_URL = "https://api.cynsta.com/v1/public/pricing"
 $env:CAP_PRICING_VERIFY_SIGNATURE = "true"
 $env:CAP_PRICING_SCHEMA_VERSION = "1"
 
@@ -125,7 +125,7 @@ print(agent["agent_id"])
 `Remote pricing request failed`
 - Verify `CAP_PRICING_URL` is reachable from your machine.
 - Check cloud endpoint directly:
-  `Invoke-WebRequest -UseBasicParsing https://cynsta-spendguard.onrender.com/v1/public/pricing`
+  `Invoke-WebRequest -UseBasicParsing https://api.cynsta.com/v1/public/pricing`
 
 `CLI cannot connect to sidecar`
 - Ensure sidecar is running on `127.0.0.1:8787`.
