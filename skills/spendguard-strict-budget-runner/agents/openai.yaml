@@ -1,0 +1,4 @@
+interface:
+  display_name: "SpendGuard Strict Budget Runner"
+  short_description: "Operate SpendGuard with strict per-agent budget caps"
+  default_prompt: "Use $spendguard-strict-budget-runner to set up and run this agent with a hard budget cap."
