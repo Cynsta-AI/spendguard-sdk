@@ -7,7 +7,7 @@
 Set with GitHub CLI:
 
 ```bash
-gh secret set PYPI_API_TOKEN --repo Cynsta-AI/spendguard-sdk
+gh secret set PYPI_API_TOKEN --repo cynsta/spendguard-sdk
 ```
 
 ## Release Flow
